@@ -1,0 +1,144 @@
+/* src/pages/Auth/AuthLayout.module.css */
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--color-bg-main);
+  padding: 20px;
+}
+
+.authLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 335px;
+  border-radius: 30px;
+  padding: 20px;
+  background-color: var(--color-bg-secondary);
+  margin: 0 auto;
+}
+
+.logoWrapper {
+  align-self: flex-start;
+  margin-bottom: 40px;
+}
+
+.authContent {
+  width: 100%;
+  /* max-width: 295px; */
+}
+
+.title {
+  font-size: 31px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  color: var(--color-text-main);
+  margin-bottom: 20px;
+}
+
+.titleMuted {
+  color: rgba(227, 227, 227, 0.5);
+}
+
+.authRight {
+  display: flex;
+  justify-content: center;
+  max-width: 335px;
+  width: 100%;
+  border-radius: 30px;
+  padding-top: 20px;
+  background-color: var(--color-bg-secondary);
+  margin: 0 auto;
+}
+
+.authImage {
+  max-width: 255px;
+}
+
+/* Планшет (від 768px) */
+@media (min-width: 768px) {
+  .authPage {
+    padding: 32px;
+  }
+
+  .authLeft {
+    flex: 1;
+    width: 100%;
+    max-width: 704px;
+    min-height: calc(100vh - 64px);
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding-top: 40px;
+    padding-left: 64px;
+  }
+
+  .logoWrapper {
+    margin-bottom: 157px;
+  }
+
+  .authContent {
+    width: 472px;
+  }
+
+  .title {
+    width: 444px;
+    font-size: 64px;
+    line-height: 0.9;
+  }
+
+  .authRight {
+    display: none;
+  }
+}
+
+/* Десктоп (від 1440px) */
+@media (min-width: 1440px) {
+  .authPage {
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+    margin: 0 auto;
+  }
+
+  .authLeft {
+    flex: initial;
+    width: 600px;
+    max-width: none;
+    margin: 0;
+  }
+
+  .logoWrapper {
+    margin-bottom: 107px;
+  }
+
+  .authContent {
+    max-width: 472px;
+  }
+
+  .title {
+    font-size: 64px;
+    margin-bottom: 40px;
+  }
+
+  .authRight {
+    width: 600px;
+    max-width: none;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: flex-end;
+    margin: 0;
+  }
+
+  .authRight picture {
+    width: 405px;
+  }
+
+  .authImage {
+    width: 100%;
+    max-width: none;
+  }
+}

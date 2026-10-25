@@ -1,0 +1,21 @@
+:root {
+  --color-bg-main: #141414;
+  --color-bg-secondary: #1f1f1f;
+  --color-bg-tertiary: #262626;
+
+  --color-text-main: #f9f9f9;
+  --color-text-muted: #686868;
+  --color-text-dark: #141414;
+
+  --color-accent-blue: #4f92f7;
+  --color-accent-green: #30b94d;
+  --color-accent-red: #e90516;
+
+  --color-border: #3e3e3e;
+
+  --font-family-main: 'Gilroy', sans-serif;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --transition-main: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}

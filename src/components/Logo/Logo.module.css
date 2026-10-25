@@ -1,0 +1,23 @@
+/* src/components/Logo/Logo.module.css */
+
+.logoMobile {
+  display: block;
+  width: 42px;
+  height: 17px;
+}
+
+.logoDesktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .logoMobile {
+    display: none;
+  }
+
+  .logoDesktop {
+    display: block;
+    width: 182px;
+    height: 17px;
+  }
+}
