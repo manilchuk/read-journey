@@ -1,6 +1,8 @@
 // src/components/Header/Header.tsx
-import { useNavigate } from 'react-router-dom';
+
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { flushSync } from 'react-dom';
 import { Logo } from '../Logo/Logo';
 import { UserNav } from '../UserNav/UserNav';
 import { UserBar } from '../UserBar/UserBar';
@@ -30,7 +32,10 @@ export const Header = () => {
     } catch (error: unknown) {
       toast.error(getErrorMessage(error));
     } finally {
-      dispatch(logOut());
+      flushSync(() => {
+        dispatch(logOut());
+      });
+      navigate('/');
     }
   };
 
