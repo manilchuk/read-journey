@@ -1,0 +1,31 @@
+/* src/components/Layout/Layout.module.css */
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 20px;
+  background-color: var(--color-bg-main);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .layout {
+    gap: 16px;
+    padding: 32px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .layout {
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+}

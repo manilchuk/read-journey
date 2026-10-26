@@ -1,0 +1,28 @@
+/* src/components/UserBar/UserBar.module.css */
+
+.userBar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.userName {
+  display: none;
+  min-width: 0;
+  max-width: 200px;
+  overflow: hidden;
+  color: var(--color-text-main);
+  font-weight: var(--font-weight-bold);
+  font-size: 16px;
+  line-height: 1.1;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
+@media (min-width: 1440px) {
+  .userName {
+    display: block;
+  }
+}
