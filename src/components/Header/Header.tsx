@@ -1,12 +1,13 @@
 // src/components/Header/Header.tsx
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { flushSync } from 'react-dom';
 import { Logo } from '../Logo/Logo';
 import { UserNav } from '../UserNav/UserNav';
 import { UserBar } from '../UserBar/UserBar';
 import { Icon } from '../Icon/Icon';
+import { MobileMenu } from '../MobileMenu/MobileMenu';
 import { useAppDispatch, useAppSelector } from '@/redux/hooks';
 import { logOut } from '@/redux/auth/slice';
 import { signOut } from '@/services/auth';
@@ -19,7 +20,9 @@ export const Header = () => {
   const navigate = useNavigate();
   const user = useAppSelector((state) => state.auth.user);
   const isLoggedIn = useAppSelector((state) => state.auth.isLoggedIn);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // Редірект, якщо користувач вийшов (наприклад, у іншій вкладці)
   useEffect(() => {
     if (!isLoggedIn) {
       navigate('/');
@@ -36,6 +39,7 @@ export const Header = () => {
         dispatch(logOut());
       });
       navigate('/');
+      setIsMenuOpen(false); // Закриваємо меню, якщо воно було відкрите
     }
   };
 
@@ -58,10 +62,17 @@ export const Header = () => {
         </button>
 
         {/* Бургер для мобільних */}
-        <button className={styles.burgerBtn}>
+        <button
+          className={styles.burgerBtn}
+          onClick={() => setIsMenuOpen(true)}
+          aria-label="Open menu"
+        >
           <Icon name="icon-burger" />
         </button>
       </div>
+
+      {/* Мобільне меню */}
+      <MobileMenu isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </header>
   );
 };
