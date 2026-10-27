@@ -4,6 +4,8 @@ import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { Filters } from '@/components/Filters/Filters';
 import { StartWorkoutBlock } from '@/components/StartWorkoutBlock/StartWorkoutBlock';
 import { BookCard } from '@/components/BookCard/BookCard';
+import { Modal } from '@/components/Modal/Modal';
+import { BookDetailsModal } from '@/components/BookDetailsModal/BookDetailsModal';
 import { useBooksPerPage } from '@/hooks/useBooksPerPage';
 import { getRecommendedBooks } from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
@@ -19,6 +21,9 @@ export const RecommendedPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({ title: '', author: '' });
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<RecommendedBook | null>(
+    null
+  );
 
   // Коли змінюється кількість книжок на сторінці (зміна ширини екрана),
   // повертаємось на першу сторінку. Скидання під час рендеру не дає
@@ -72,6 +77,17 @@ export const RecommendedPage = () => {
     if (page < totalPages) setPage(page + 1);
   };
 
+  const handleAddToLibrary = async (bookId: string) => {
+    try {
+      // Тут буде запит на бекенд (додамо пізніше)
+      console.log('Add to library:', bookId);
+      toast.success('Book added to library!');
+      setSelectedBook(null);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
   return (
     <div className={styles.page}>
       <Dashboard>
@@ -120,12 +136,21 @@ export const RecommendedPage = () => {
                 title={book.title}
                 author={book.author}
                 imageUrl={book.imageUrl}
-                onClick={() => console.log('Open modal for', book._id)}
+                onClick={() => setSelectedBook(book)}
               />
             ))}
           </div>
         )}
       </div>
+
+      <Modal isOpen={!!selectedBook} onClose={() => setSelectedBook(null)}>
+        {selectedBook && (
+          <BookDetailsModal
+            book={selectedBook}
+            onAddToLibrary={handleAddToLibrary}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

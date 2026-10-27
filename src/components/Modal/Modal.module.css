@@ -1,0 +1,60 @@
+/* src/components/Modal/Modal.module.css */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(20, 20, 20, 0.8);
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.content {
+  position: relative;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid rgba(104, 104, 104, 0.2);
+  border-radius: 12px;
+  padding: 40px;
+  width: 100%;
+  max-width: 335px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: fadeIn 0.2s ease;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  color: var(--color-text-main);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.closeIcon {
+  width: 22px;
+  height: 22px;
+}
+
+@media (min-width: 768px) {
+  .content {
+    max-width: 500px;
+    padding: 50px;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
