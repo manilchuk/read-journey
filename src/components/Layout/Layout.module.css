@@ -20,12 +20,14 @@
   .layout {
     gap: 16px;
     padding: 32px;
+    width: 768px;
+    margin: 0 auto;
   }
 }
 
 @media (min-width: 1440px) {
   .layout {
-    max-width: 1440px;
+    width: 1280px;
     margin: 0 auto;
   }
 }
