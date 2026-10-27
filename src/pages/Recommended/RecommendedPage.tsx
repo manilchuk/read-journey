@@ -7,7 +7,11 @@ import { BookCard } from '@/components/BookCard/BookCard';
 import { Modal } from '@/components/Modal/Modal';
 import { BookDetailsModal } from '@/components/BookDetailsModal/BookDetailsModal';
 import { useBooksPerPage } from '@/hooks/useBooksPerPage';
-import { getRecommendedBooks } from '@/services/books';
+import {
+  getRecommendedBooks,
+  addRecommendedBook,
+  getOwnBooks,
+} from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
 import toast from 'react-hot-toast';
 import type { RecommendedBook } from '@/types';
@@ -24,10 +28,8 @@ export const RecommendedPage = () => {
   const [selectedBook, setSelectedBook] = useState<RecommendedBook | null>(
     null
   );
+  const [isAdding, setIsAdding] = useState(false);
 
-  // Коли змінюється кількість книжок на сторінці (зміна ширини екрана),
-  // повертаємось на першу сторінку. Скидання під час рендеру не дає
-  // зробити зайвий запит зі старим номером сторінки.
   const [prevLimit, setPrevLimit] = useState(limit);
   if (prevLimit !== limit) {
     setPrevLimit(limit);
@@ -35,7 +37,6 @@ export const RecommendedPage = () => {
   }
 
   useEffect(() => {
-    // Прапорець не дає застарілій відповіді перезаписати новішу
     let isCancelled = false;
 
     const loadBooks = async () => {
@@ -78,13 +79,36 @@ export const RecommendedPage = () => {
   };
 
   const handleAddToLibrary = async (bookId: string) => {
+    if (isAdding) return;
+    setIsAdding(true);
     try {
-      // Тут буде запит на бекенд (додамо пізніше)
-      console.log('Add to library:', bookId);
+      // Знаходимо книгу в каталозі, щоб знати її назву та автора
+      const catalogBook = books.find((b) => b._id === bookId);
+      if (!catalogBook) {
+        toast.error('Book not found in catalog');
+        return;
+      }
+
+      // Перевіряємо, чи є книга в бібліотеці за назвою та автором
+      const ownBooks = await getOwnBooks();
+      const isAlreadyInLibrary = ownBooks.some(
+        (book) =>
+          book.title === catalogBook.title && book.author === catalogBook.author
+      );
+
+      if (isAlreadyInLibrary) {
+        toast.error('This book is already in your library');
+        return;
+      }
+
+      // Якщо немає — додаємо
+      await addRecommendedBook(bookId);
       toast.success('Book added to library!');
       setSelectedBook(null);
     } catch (error: unknown) {
       toast.error(getErrorMessage(error));
+    } finally {
+      setIsAdding(false);
     }
   };
 
