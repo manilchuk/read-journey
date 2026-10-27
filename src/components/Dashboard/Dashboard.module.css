@@ -1,0 +1,14 @@
+/* src/components/Dashboard/Dashboard.module.css */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+@media (min-width: 1440px) {
+  .dashboard {
+    width: 353px;
+    flex-shrink: 0;
+  }
+}
