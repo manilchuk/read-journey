@@ -1,9 +1,13 @@
 /* src/components/BookCard/BookCard.module.css */
 .card {
+  --book-card-width: 137px;
+  --book-card-title-size: 14px;
+  --book-card-author-size: 10px;
+
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
-  width: 137px;
+  width: var(--book-card-width);
   cursor: pointer;
   transition: transform var(--transition-main);
 }
@@ -29,7 +33,7 @@
 }
 
 .title {
-  font-size: 14px;
+  font-size: var(--book-card-title-size);
   line-height: 1.3;
   font-weight: var(--font-weight-bold);
   color: var(--color-text-main);
@@ -41,7 +45,7 @@
 
 .author {
   overflow: hidden;
-  font-size: 10px;
+  font-size: var(--book-card-author-size);
   line-height: 1.2;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);

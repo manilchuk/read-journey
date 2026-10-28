@@ -6,6 +6,7 @@ interface BookCardProps {
   author: string;
   imageUrl: string;
   onClick?: () => void;
+  className?: string;
 }
 
 export const BookCard = ({
@@ -13,9 +14,12 @@ export const BookCard = ({
   author,
   imageUrl,
   onClick,
+  className,
 }: BookCardProps) => {
+  const rootClass = [styles.card, className].filter(Boolean).join(' ');
+
   return (
-    <div className={styles.card} onClick={onClick}>
+    <div className={rootClass} onClick={onClick}>
       <div className={styles.imageWrapper}>
         <img
           src={imageUrl}

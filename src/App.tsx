@@ -8,6 +8,7 @@ import { WelcomePage } from './pages/Welcome/WelcomePage';
 import { RegisterPage } from './pages/Auth/RegisterPage';
 import { LoginPage } from './pages/Auth/LoginPage';
 import { RecommendedPage } from './pages/Recommended/RecommendedPage';
+import { LibraryPage } from './pages/Library/LibraryPage';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         <Route element={<PrivateRoute />}>
           <Route element={<Layout />}>
             <Route path="/recommended" element={<RecommendedPage />} />
-            <Route path="/library" element={<div>Library Page</div>} />
+            <Route path="/library" element={<LibraryPage />} />
             <Route path="/reading" element={<div>Reading Page</div>} />
           </Route>
         </Route>
