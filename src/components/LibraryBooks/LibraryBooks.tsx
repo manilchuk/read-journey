@@ -1,51 +1,54 @@
 // src/components/LibraryBooks/LibraryBooks.tsx
-import { useState } from 'react';
 import { BookCard } from '../BookCard/BookCard';
 import { Icon } from '../Icon/Icon';
 import booksImage from '@/assets/images/Recommendations/books.webp';
+import type { Book } from '@/types';
 import styles from './LibraryBooks.module.css';
 
-interface LibraryBook {
-  _id: string;
-  title: string;
-  author: string;
-  imageUrl: string;
-  status: string;
-}
-
 interface LibraryBooksProps {
-  books: LibraryBook[];
+  books: Book[];
   onDelete: (id: string) => void;
-  onOpenBook: (book: LibraryBook) => void;
+  onOpenBook: (book: Book) => void;
+  selectedStatus: string;
+  onStatusChange: (status: string) => void;
+  isLoading?: boolean;
 }
 
-const STATUS_OPTIONS = ['Unread', 'In progress', 'Done', 'All books'];
+const STATUS_OPTIONS = [
+  { label: 'Unread', value: 'unread' },
+  { label: 'In progress', value: 'in-progress' },
+  { label: 'Done', value: 'done' },
+  { label: 'All books', value: 'All books' },
+];
 
 export const LibraryBooks = ({
   books,
   onDelete,
   onOpenBook,
+  selectedStatus,
+  onStatusChange,
+  isLoading = false,
 }: LibraryBooksProps) => {
-  const [status, setStatus] = useState('All books');
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>My library</h1>
         <select
           className={styles.select}
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          value={selectedStatus}
+          onChange={(e) => onStatusChange(e.target.value)}
         >
           {STATUS_OPTIONS.map((opt) => (
-            <option key={opt} value={opt}>
-              {opt}
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
             </option>
           ))}
         </select>
       </div>
 
-      {books.length === 0 ? (
+      {isLoading ? (
+        <div className={styles.loading}>Loading...</div>
+      ) : books.length === 0 ? (
         <div className={styles.emptyState}>
           <div className={styles.emptyIcon}>
             <img src={booksImage} alt="" />
