@@ -1,5 +1,4 @@
 // src/components/BookDetailsModal/BookDetailsModal.tsx
-
 import styles from './BookDetailsModal.module.css';
 
 interface BookDetailsModalProps {
@@ -10,12 +9,14 @@ interface BookDetailsModalProps {
     imageUrl: string;
     totalPages: number;
   };
-  onAddToLibrary: (id: string) => void;
+  actionLabel: string;
+  onAction: (id: string) => void;
 }
 
 export const BookDetailsModal = ({
   book,
-  onAddToLibrary,
+  actionLabel,
+  onAction,
 }: BookDetailsModalProps) => {
   return (
     <div className={styles.container}>
@@ -25,11 +26,8 @@ export const BookDetailsModal = ({
       <h2 className={styles.title}>{book.title}</h2>
       <p className={styles.author}>{book.author}</p>
       <p className={styles.pages}>{book.totalPages} pages</p>
-      <button
-        className={styles.addBtn}
-        onClick={() => onAddToLibrary(book._id)}
-      >
-        Add to library
+      <button className={styles.addBtn} onClick={() => onAction(book._id)}>
+        {actionLabel}
       </button>
     </div>
   );

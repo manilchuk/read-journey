@@ -31,7 +31,13 @@ export const LibraryBooks = ({
 }: LibraryBooksProps) => {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
+      <div
+        className={`${styles.header} ${
+          !isLoading && books.length === 0
+            ? styles.headerEmpty
+            : styles.headerWithBooks
+        }`}
+      >
         <h1 className={styles.title}>My library</h1>
         <select
           className={styles.select}

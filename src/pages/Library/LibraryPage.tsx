@@ -1,9 +1,13 @@
 // src/pages/Library/LibraryPage.tsx
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { AddBookForm } from '@/components/AddBookForm/AddBookForm';
 import { RecommendedBooksBlock } from '@/components/RecommendedBooksBlock/RecommendedBooksBlock';
 import { LibraryBooks } from '@/components/LibraryBooks/LibraryBooks';
+import { Modal } from '@/components/Modal/Modal';
+import { GoodJobModal } from '@/components/GoodJobModal/GoodJobModal';
+import { BookDetailsModal } from '@/components/BookDetailsModal/BookDetailsModal';
 import {
   getOwnBooks,
   addBook,
@@ -16,14 +20,17 @@ import type { Book, RecommendedBook } from '@/types';
 import styles from './LibraryPage.module.css';
 
 export const LibraryPage = () => {
+  const navigate = useNavigate();
+
   const [ownBooks, setOwnBooks] = useState<Book[]>([]);
   const [recommendedBooks, setRecommendedBooks] = useState<RecommendedBook[]>(
     []
   );
   const [selectedStatus, setSelectedStatus] = useState<string>('All books');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoodJobOpen, setIsGoodJobOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
-  // Функція для ручного оновлення списку (після додавання/видалення)
   const loadOwnBooks = useCallback(async (status: string) => {
     setIsLoading(true);
     try {
@@ -38,7 +45,6 @@ export const LibraryPage = () => {
     }
   }, []);
 
-  // Завантаження рекомендованих книг (один раз)
   useEffect(() => {
     const loadRecommended = async () => {
       try {
@@ -51,7 +57,6 @@ export const LibraryPage = () => {
     loadRecommended();
   }, []);
 
-  // Завантаження власних книг при зміні фільтра
   useEffect(() => {
     let isCancelled = false;
 
@@ -61,17 +66,11 @@ export const LibraryPage = () => {
         const data = await getOwnBooks(
           selectedStatus === 'All books' ? undefined : selectedStatus
         );
-        if (!isCancelled) {
-          setOwnBooks(data);
-        }
+        if (!isCancelled) setOwnBooks(data);
       } catch (error: unknown) {
-        if (!isCancelled) {
-          toast.error(getErrorMessage(error));
-        }
+        if (!isCancelled) toast.error(getErrorMessage(error));
       } finally {
-        if (!isCancelled) {
-          setIsLoading(false);
-        }
+        if (!isCancelled) setIsLoading(false);
       }
     };
 
@@ -89,7 +88,7 @@ export const LibraryPage = () => {
   }) => {
     try {
       await addBook(values);
-      toast.success('Book added to library!');
+      setIsGoodJobOpen(true); // Показуємо модалку "Good job"
       loadOwnBooks(selectedStatus);
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -112,7 +111,13 @@ export const LibraryPage = () => {
   };
 
   const handleOpenBook = (book: Book) => {
-    console.log('Open book:', book);
+    setSelectedBook(book);
+  };
+
+  const handleStartReading = (id: string) => {
+    // Переходимо на сторінку читання з id книги
+    navigate(`/reading?bookId=${id}`);
+    setSelectedBook(null);
   };
 
   const handleStatusChange = (status: string) => {
@@ -134,6 +139,20 @@ export const LibraryPage = () => {
         onStatusChange={handleStatusChange}
         isLoading={isLoading}
       />
+
+      <Modal isOpen={isGoodJobOpen} onClose={() => setIsGoodJobOpen(false)}>
+        <GoodJobModal />
+      </Modal>
+
+      <Modal isOpen={!!selectedBook} onClose={() => setSelectedBook(null)}>
+        {selectedBook && (
+          <BookDetailsModal
+            book={selectedBook}
+            actionLabel="Start reading"
+            onAction={handleStartReading}
+          />
+        )}
+      </Modal>
     </div>
   );
 };

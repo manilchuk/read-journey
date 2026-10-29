@@ -82,14 +82,12 @@ export const RecommendedPage = () => {
     if (isAdding) return;
     setIsAdding(true);
     try {
-      // Знаходимо книгу в каталозі, щоб знати її назву та автора
       const catalogBook = books.find((b) => b._id === bookId);
       if (!catalogBook) {
         toast.error('Book not found in catalog');
         return;
       }
 
-      // Перевіряємо, чи є книга в бібліотеці за назвою та автором
       const ownBooks = await getOwnBooks();
       const isAlreadyInLibrary = ownBooks.some(
         (book) =>
@@ -101,7 +99,6 @@ export const RecommendedPage = () => {
         return;
       }
 
-      // Якщо немає — додаємо
       await addRecommendedBook(bookId);
       toast.success('Book added to library!');
       setSelectedBook(null);
@@ -171,7 +168,8 @@ export const RecommendedPage = () => {
         {selectedBook && (
           <BookDetailsModal
             book={selectedBook}
-            onAddToLibrary={handleAddToLibrary}
+            actionLabel="Add to library"
+            onAction={handleAddToLibrary}
           />
         )}
       </Modal>
