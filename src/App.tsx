@@ -9,6 +9,7 @@ import { RegisterPage } from './pages/Auth/RegisterPage';
 import { LoginPage } from './pages/Auth/LoginPage';
 import { RecommendedPage } from './pages/Recommended/RecommendedPage';
 import { LibraryPage } from './pages/Library/LibraryPage';
+import { ReadingPage } from './pages/Reading/ReadingPage';
 
 function App() {
   return (
@@ -24,7 +25,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/recommended" element={<RecommendedPage />} />
             <Route path="/library" element={<LibraryPage />} />
-            <Route path="/reading" element={<div>Reading Page</div>} />
+            <Route path="/reading" element={<ReadingPage />} />
           </Route>
         </Route>
 

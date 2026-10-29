@@ -6,6 +6,7 @@ import { StartWorkoutBlock } from '@/components/StartWorkoutBlock/StartWorkoutBl
 import { BookCard } from '@/components/BookCard/BookCard';
 import { Modal } from '@/components/Modal/Modal';
 import { BookDetailsModal } from '@/components/BookDetailsModal/BookDetailsModal';
+import { GoodJobModal } from '@/components/GoodJobModal/GoodJobModal';
 import { useBooksPerPage } from '@/hooks/useBooksPerPage';
 import {
   getRecommendedBooks,
@@ -29,6 +30,7 @@ export const RecommendedPage = () => {
     null
   );
   const [isAdding, setIsAdding] = useState(false);
+  const [isGoodJobOpen, setIsGoodJobOpen] = useState(false);
 
   const [prevLimit, setPrevLimit] = useState(limit);
   if (prevLimit !== limit) {
@@ -100,8 +102,8 @@ export const RecommendedPage = () => {
       }
 
       await addRecommendedBook(bookId);
-      toast.success('Book added to library!');
       setSelectedBook(null);
+      setIsGoodJobOpen(true); // Відкриваємо модалку "Good job" замість тосту
     } catch (error: unknown) {
       toast.error(getErrorMessage(error));
     } finally {
@@ -172,6 +174,10 @@ export const RecommendedPage = () => {
             onAction={handleAddToLibrary}
           />
         )}
+      </Modal>
+
+      <Modal isOpen={isGoodJobOpen} onClose={() => setIsGoodJobOpen(false)}>
+        <GoodJobModal />
       </Modal>
     </div>
   );

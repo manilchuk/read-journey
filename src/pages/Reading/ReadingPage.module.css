@@ -1,0 +1,25 @@
+/* src/pages/Reading/ReadingPage.module.css */
+.page {
+  width: 100%;
+  max-width: 375px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 20px 40px;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .page {
+    max-width: 768px;
+    padding: 32px;
+    gap: 16px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .page {
+    flex-direction: row;
+    max-width: 1280px;
+    padding: 32px 32px 27px;
+  }
+}
