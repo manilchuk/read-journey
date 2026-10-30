@@ -86,13 +86,8 @@ export const ReadingPage = () => {
     }
   };
 
-  const handleDeleteEntry = async (readingId: string) => {
-    if (!book) return;
-    try {
-      console.log('Delete entry:', readingId);
-    } catch (error: unknown) {
-      toast.error(getErrorMessage(error));
-    }
+  const handleDeleteEntry = async () => {
+    toast.error('Deleting entries is not supported');
   };
 
   if (isLoading) {
@@ -123,26 +118,32 @@ export const ReadingPage = () => {
           initialPage={currentPage}
         />
 
-        {isReading ? (
+        {book.progress.length > 0 && (
           <div className={styles.viewToggle}>
             <button
-              className={`${styles.viewBtn} ${view === 'diary' ? styles.viewBtnActive : ''}`}
+              className={`${styles.viewBtn} ${
+                view === 'diary' ? styles.viewBtnActive : ''
+              }`}
               onClick={() => setView('diary')}
+              aria-label="Show diary"
             >
               <svg className={styles.viewIcon} aria-hidden="true">
                 <use href="/sprite.svg#icon-stopwatch" />
               </svg>
             </button>
             <button
-              className={`${styles.viewBtn} ${view === 'statistics' ? styles.viewBtnActive : ''}`}
+              className={`${styles.viewBtn} ${
+                view === 'statistics' ? styles.viewBtnActive : ''
+              }`}
               onClick={() => setView('statistics')}
+              aria-label="Show statistics"
             >
               <svg className={styles.viewIcon} aria-hidden="true">
                 <use href="/sprite.svg#icon-chart" />
               </svg>
             </button>
           </div>
-        ) : null}
+        )}
 
         {view === 'diary' ? (
           <DiaryBlock progress={book.progress} onDelete={handleDeleteEntry} />

@@ -23,10 +23,14 @@
   background: transparent;
   border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: border-color var(--transition-main);
+  transition:
+    border-color var(--transition-main),
+    opacity var(--transition-main);
+  opacity: 0.5;
 }
 
 .viewBtnActive {
+  opacity: 1;
   border-color: var(--color-text-main);
 }
 
