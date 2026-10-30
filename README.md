@@ -61,6 +61,7 @@ npm run dev
 
 ## 🏗️ Project Structure
 
+```
 src/
 ├── assets/ # Images, icons, fonts
 ├── components/ # UI components
@@ -74,6 +75,7 @@ src/
 ├── App.tsx # Main component
 ├── index.css # Global styles
 └── main.tsx # Entry point
+```
 
 ## 🎨 Implementation Features
 
@@ -94,3 +96,7 @@ The project is deployed on Vercel: [Read Journey](https://read-journey-твій-
 Valentyn Manilchuk
 
 GitHub: [@manilchuk](https://github.com/manilchuk).
+
+```
+
+```
