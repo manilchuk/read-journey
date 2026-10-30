@@ -23,7 +23,7 @@
 }
 
 .bookCard {
-  --book-card-width: 100%;
+  --book-card-width: 71px;
   --book-card-title-size: 10px;
   --book-card-author-size: 10px;
 }

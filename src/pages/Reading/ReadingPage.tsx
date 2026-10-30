@@ -1,22 +1,47 @@
 // src/pages/Reading/ReadingPage.tsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { AddReadingForm } from '@/components/AddReadingForm/AddReadingForm';
 import { ProgressBlock } from '@/components/ProgressBlock/ProgressBlock';
 import { MyBook } from '@/components/MyBook/MyBook';
+import { getBookById } from '@/services/books';
+import { getErrorMessage } from '@/utils/handleError';
+import toast from 'react-hot-toast';
+import type { Book } from '@/types';
 import styles from './ReadingPage.module.css';
 
-// Тимчасові дані (потім замінимо на API)
-const mockBook = {
-  _id: '1',
-  title: 'I See You Are Interested In The Dark',
-  author: 'Hilarion Pavlyuk',
-  imageUrl:
-    'https://res.cloudinary.com/drfvfno3o/image/upload/v1699726543/books/1.webp',
-};
-
 export const ReadingPage = () => {
+  const [searchParams] = useSearchParams();
+  const bookId = searchParams.get('bookId');
+
+  const [book, setBook] = useState<Book | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [isReading, setIsReading] = useState(false);
+
+  useEffect(() => {
+    if (!bookId) return;
+
+    let isCancelled = false;
+
+    const loadBook = async () => {
+      setIsLoading(true);
+      try {
+        const data = await getBookById(bookId);
+        if (!isCancelled) setBook(data);
+      } catch (error: unknown) {
+        if (!isCancelled) toast.error(getErrorMessage(error));
+      } finally {
+        if (!isCancelled) setIsLoading(false);
+      }
+    };
+
+    loadBook();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [bookId]);
 
   const handleStart = (page: number) => {
     console.log('Start reading from page:', page);
@@ -32,6 +57,18 @@ export const ReadingPage = () => {
     setIsReading(!isReading);
   };
 
+  if (isLoading) {
+    return <div className={styles.placeholder}>Loading...</div>;
+  }
+
+  if (!book) {
+    return (
+      <div className={styles.placeholder}>
+        No book selected. Go to library to start reading.
+      </div>
+    );
+  }
+
   return (
     <div className={styles.page}>
       <Dashboard>
@@ -43,9 +80,9 @@ export const ReadingPage = () => {
       </Dashboard>
 
       <MyBook
-        title={mockBook.title}
-        author={mockBook.author}
-        imageUrl={mockBook.imageUrl}
+        title={book.title}
+        author={book.author}
+        imageUrl={book.imageUrl}
         isReading={isReading}
         onToggleReading={handleToggleReading}
       />

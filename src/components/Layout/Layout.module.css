@@ -16,6 +16,13 @@
   min-width: 0;
 }
 
+@media (min-width: 375px) and (max-width: 767px) {
+  .layout {
+    max-width: 375px;
+    margin: 0 auto;
+  }
+}
+
 @media (min-width: 768px) {
   .layout {
     gap: 16px;

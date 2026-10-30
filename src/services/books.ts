@@ -37,3 +37,8 @@ export const addBook = async (data: {
 export const removeBook = async (id: string): Promise<void> => {
   await api.delete(`/books/remove/${id}`);
 };
+
+export const getBookById = async (id: string): Promise<Book> => {
+  const response = await api.get<Book>(`/books/${id}`);
+  return response.data;
+};
