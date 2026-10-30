@@ -6,6 +6,8 @@ import { AddReadingForm } from '@/components/AddReadingForm/AddReadingForm';
 import { DiaryBlock } from '@/components/DiaryBlock/DiaryBlock';
 import { StatisticsBlock } from '@/components/StatisticsBlock/StatisticsBlock';
 import { MyBook } from '@/components/MyBook/MyBook';
+import { Modal } from '@/components/Modal/Modal';
+import { BookIsReadModal } from '@/components/BookIsReadModal/BookIsReadModal';
 import { getBookById, startReading, stopReading } from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
 import toast from 'react-hot-toast';
@@ -23,6 +25,7 @@ export const ReadingPage = () => {
   const [isReading, setIsReading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [view, setView] = useState<View>('diary');
+  const [isBookReadOpen, setIsBookReadOpen] = useState(false);
 
   useEffect(() => {
     if (!bookId) return;
@@ -81,6 +84,11 @@ export const ReadingPage = () => {
       setIsReading(false);
       setCurrentPage(page);
       toast.success('Reading stopped!');
+
+      // Перевіряємо, чи книга дочитана
+      if (page >= book.totalPages) {
+        setIsBookReadOpen(true);
+      }
     } catch (error: unknown) {
       toast.error(getErrorMessage(error));
     }
@@ -121,9 +129,7 @@ export const ReadingPage = () => {
         {book.progress.length > 0 && (
           <div className={styles.viewToggle}>
             <button
-              className={`${styles.viewBtn} ${
-                view === 'diary' ? styles.viewBtnActive : ''
-              }`}
+              className={`${styles.viewBtn} ${view === 'diary' ? styles.viewBtnActive : ''}`}
               onClick={() => setView('diary')}
               aria-label="Show diary"
             >
@@ -132,9 +138,7 @@ export const ReadingPage = () => {
               </svg>
             </button>
             <button
-              className={`${styles.viewBtn} ${
-                view === 'statistics' ? styles.viewBtnActive : ''
-              }`}
+              className={`${styles.viewBtn} ${view === 'statistics' ? styles.viewBtnActive : ''}`}
               onClick={() => setView('statistics')}
               aria-label="Show statistics"
             >
@@ -161,6 +165,10 @@ export const ReadingPage = () => {
         imageUrl={book.imageUrl}
         isReading={isReading}
       />
+
+      <Modal isOpen={isBookReadOpen} onClose={() => setIsBookReadOpen(false)}>
+        <BookIsReadModal />
+      </Modal>
     </div>
   );
 };
