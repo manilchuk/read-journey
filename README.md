@@ -89,7 +89,7 @@ src/
 
 ## 🌐 Deployment
 
-The project is deployed on Vercel: [Read Journey](https://read-journey-твій-нік.vercel.app).
+The project is deployed on Vercel: [Read Journey](https://read-journey-nu.vercel.app).
 
 ## 👤 Author
 
