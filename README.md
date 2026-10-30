@@ -1,75 +1,96 @@
-# React + TypeScript + Vite
+# Read Journey
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Read Journey** is a web application for tracking your reading progress. It allows users to create a personal library, add books from recommendations, track reading progress (pages, time, speed), and view statistics as a diary or a chart.
 
-Currently, two official plugins are available:
+## 📋 Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- [Technologies](#-technologies)
+- [Design & Documentation](#-design--documentation)
+- [Installation & Running](#-installation--running)
+- [Project Structure](#-project-structure)
+- [Implementation Features](#-implementation-features)
+- [Deployment](#-deployment)
+- [Author](#-author)
 
-## React Compiler
+## 🚀 Technologies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React** (v18+) — UI library.
+- **TypeScript** — static typing.
+- **Vite** — fast bundler.
+- **React Router DOM** — routing.
+- **Redux Toolkit** — state management (authentication).
+- **Formik + Yup** — forms and validation.
+- **Axios** — HTTP client for API requests.
+- **React Hot Toast** — notifications.
+- **CSS Modules** — styling.
+- **Gilroy** — font from the design.
 
-## Expanding the ESLint configuration
+## 🔗 Design & Documentation
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- [Figma design](https://www.figma.com/file/z3m0rdBcEfLTJUBDkAKhWQ/BOOKS-READING?type=design&node-id=18743%3A4973&mode=design&t=Hi1KTaUJMogWXZzz-1)
+- [API documentation](https://readjourney.b.goit.study/api-docs/)
+- [Technical specification (TS)](https://docs.google.com/spreadsheets/d/1_f4IZzXDs6QhQq3mOCOMktYasPW1XphdTO82rdrkyW8/edit?gid=1060862504#gid=1060862504)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📦 Installation & Running
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Clone the repository:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+git clone https://github.com/manilchuk/read-journey.git
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+2. Navigate to the project folder:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd read-journey
 ```
+
+3. Install dependencies:
+
+```bash
+npm install
+```
+
+4. Run the project in development mode:
+
+```bash
+npm run dev
+```
+
+5. Open http://localhost:5173 in your browser.
+
+## 🏗️ Project Structure
+
+src/
+├── assets/ # Images, icons, fonts
+├── components/ # UI components
+├── hooks/ # Custom hooks
+├── pages/ # Pages
+├── redux/ # Redux store and slices
+├── services/ # API requests
+├── styles/ # Global styles and variables
+├── types/ # TypeScript types
+├── utils/ # Utilities (validation, error handling)
+├── App.tsx # Main component
+├── index.css # Global styles
+└── main.tsx # Entry point
+
+## 🎨 Implementation Features
+
+- Responsive design (MobileFirst): mobile (320px-767px), tablet (768px+), desktop (1440px+).
+- Form validation using Formik + Yup (email pattern from TS).
+- Route protection (PrivateRoute / PublicRoute).
+- Server-side pagination for the Recommended Page.
+- Book filtering in the library by status.
+- Modals (closing by cross icon, backdrop, ESC).
+- Notifications (react-hot-toast) for errors and successes.
+
+## 🌐 Deployment
+
+The project is deployed on Vercel: [Read Journey](https://read-journey-твій-нік.vercel.app).
+
+## 👤 Author
+
+Valentyn Manilchuk
+
+GitHub: [@manilchuk](https://github.com/manilchuk).
