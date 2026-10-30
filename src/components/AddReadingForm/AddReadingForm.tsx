@@ -6,6 +6,7 @@ import styles from './AddReadingForm.module.css';
 interface AddReadingFormProps {
   isReading: boolean;
   onSubmit: (page: number) => void;
+  initialPage?: number;
 }
 
 const validationSchema = Yup.object({
@@ -15,6 +16,7 @@ const validationSchema = Yup.object({
 export const AddReadingForm = ({
   isReading,
   onSubmit,
+  initialPage = 0,
 }: AddReadingFormProps) => {
   return (
     <div className={styles.container}>
@@ -22,11 +24,11 @@ export const AddReadingForm = ({
         {isReading ? 'Stop page:' : 'Start page:'}
       </h2>
       <Formik
-        initialValues={{ page: 0 }}
+        initialValues={{ page: initialPage }}
         validationSchema={validationSchema}
-        onSubmit={(values, { resetForm }) => {
+        enableReinitialize
+        onSubmit={(values) => {
           onSubmit(values.page);
-          resetForm();
         }}
       >
         {({ errors, touched }) => (

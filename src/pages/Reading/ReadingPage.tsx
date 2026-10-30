@@ -5,7 +5,7 @@ import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { AddReadingForm } from '@/components/AddReadingForm/AddReadingForm';
 import { ProgressBlock } from '@/components/ProgressBlock/ProgressBlock';
 import { MyBook } from '@/components/MyBook/MyBook';
-import { getBookById } from '@/services/books';
+import { getBookById, startReading, stopReading } from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
 import toast from 'react-hot-toast';
 import type { Book } from '@/types';
@@ -18,6 +18,7 @@ export const ReadingPage = () => {
   const [book, setBook] = useState<Book | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isReading, setIsReading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
 
   useEffect(() => {
     if (!bookId) return;
@@ -28,7 +29,19 @@ export const ReadingPage = () => {
       setIsLoading(true);
       try {
         const data = await getBookById(bookId);
-        if (!isCancelled) setBook(data);
+        if (!isCancelled) {
+          setBook(data);
+          const activeProgress = data.progress.find(
+            (p) => p.status === 'active'
+          );
+          setIsReading(!!activeProgress);
+          const lastProgress = data.progress[data.progress.length - 1];
+          if (lastProgress) {
+            setCurrentPage(
+              lastProgress.finishPage || lastProgress.startPage || 0
+            );
+          }
+        }
       } catch (error: unknown) {
         if (!isCancelled) toast.error(getErrorMessage(error));
       } finally {
@@ -43,18 +56,30 @@ export const ReadingPage = () => {
     };
   }, [bookId]);
 
-  const handleStart = (page: number) => {
-    console.log('Start reading from page:', page);
-    setIsReading(true);
+  const handleStart = async (page: number) => {
+    if (!book) return;
+    try {
+      const updatedBook = await startReading(book._id, page);
+      setBook(updatedBook);
+      setIsReading(true);
+      setCurrentPage(page);
+      toast.success('Reading started!');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
-  const handleStop = (page: number) => {
-    console.log('Stop reading at page:', page);
-    setIsReading(false);
-  };
-
-  const handleToggleReading = () => {
-    setIsReading(!isReading);
+  const handleStop = async (page: number) => {
+    if (!book) return;
+    try {
+      const updatedBook = await stopReading(book._id, page);
+      setBook(updatedBook);
+      setIsReading(false);
+      setCurrentPage(page);
+      toast.success('Reading stopped!');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   if (isLoading) {
@@ -75,6 +100,7 @@ export const ReadingPage = () => {
         <AddReadingForm
           isReading={isReading}
           onSubmit={isReading ? handleStop : handleStart}
+          initialPage={currentPage}
         />
         <ProgressBlock />
       </Dashboard>
@@ -84,7 +110,6 @@ export const ReadingPage = () => {
         author={book.author}
         imageUrl={book.imageUrl}
         isReading={isReading}
-        onToggleReading={handleToggleReading}
       />
     </div>
   );

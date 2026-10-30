@@ -42,3 +42,23 @@ export const getBookById = async (id: string): Promise<Book> => {
   const response = await api.get<Book>(`/books/${id}`);
   return response.data;
 };
+
+export const startReading = async (id: string, page: number): Promise<Book> => {
+  const response = await api.post<Book>('/books/reading/start', { id, page });
+  return response.data;
+};
+
+export const stopReading = async (id: string, page: number): Promise<Book> => {
+  const response = await api.post<Book>('/books/reading/finish', { id, page });
+  return response.data;
+};
+
+export const deleteReading = async (
+  bookId: string,
+  readingId: string
+): Promise<Book> => {
+  const response = await api.delete<Book>('/books/reading', {
+    params: { bookId, readingId },
+  });
+  return response.data;
+};

@@ -8,7 +8,6 @@ interface MyBookProps {
   imageUrl: string;
   isReading: boolean;
   timeLeft?: string;
-  onToggleReading: () => void;
 }
 
 export const MyBook = ({
@@ -17,7 +16,6 @@ export const MyBook = ({
   imageUrl,
   isReading,
   timeLeft,
-  onToggleReading,
 }: MyBookProps) => {
   return (
     <div className={styles.container}>
@@ -29,16 +27,15 @@ export const MyBook = ({
         <img src={imageUrl} alt={title} className={styles.cover} />
         <h2 className={styles.bookTitle}>{title}</h2>
         <p className={styles.author}>{author}</p>
-        <button
-          className={styles.toggleBtn}
-          onClick={onToggleReading}
-          aria-label={isReading ? 'Stop reading' : 'Start reading'}
+        <div
+          className={styles.indicator}
+          aria-label={isReading ? 'Reading in progress' : 'Not reading'}
         >
           <Icon
             name={isReading ? 'icon-stop' : 'icon-start'}
             className={isReading ? styles.stopIcon : styles.startIcon}
           />
-        </button>
+        </div>
       </div>
     </div>
   );
