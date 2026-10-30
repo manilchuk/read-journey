@@ -3,13 +3,16 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Dashboard } from '@/components/Dashboard/Dashboard';
 import { AddReadingForm } from '@/components/AddReadingForm/AddReadingForm';
-import { ProgressBlock } from '@/components/ProgressBlock/ProgressBlock';
+import { DiaryBlock } from '@/components/DiaryBlock/DiaryBlock';
+import { StatisticsBlock } from '@/components/StatisticsBlock/StatisticsBlock';
 import { MyBook } from '@/components/MyBook/MyBook';
 import { getBookById, startReading, stopReading } from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
 import toast from 'react-hot-toast';
 import type { Book } from '@/types';
 import styles from './ReadingPage.module.css';
+
+type View = 'diary' | 'statistics';
 
 export const ReadingPage = () => {
   const [searchParams] = useSearchParams();
@@ -19,6 +22,7 @@ export const ReadingPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isReading, setIsReading] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [view, setView] = useState<View>('diary');
 
   useEffect(() => {
     if (!bookId) return;
@@ -82,6 +86,15 @@ export const ReadingPage = () => {
     }
   };
 
+  const handleDeleteEntry = async (readingId: string) => {
+    if (!book) return;
+    try {
+      console.log('Delete entry:', readingId);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    }
+  };
+
   if (isLoading) {
     return <div className={styles.placeholder}>Loading...</div>;
   }
@@ -94,6 +107,13 @@ export const ReadingPage = () => {
     );
   }
 
+  const totalReadPages = book.progress.reduce((acc, entry) => {
+    if (entry.finishPage && entry.startPage) {
+      return acc + (entry.finishPage - entry.startPage);
+    }
+    return acc;
+  }, 0);
+
   return (
     <div className={styles.page}>
       <Dashboard>
@@ -102,7 +122,36 @@ export const ReadingPage = () => {
           onSubmit={isReading ? handleStop : handleStart}
           initialPage={currentPage}
         />
-        <ProgressBlock />
+
+        {isReading ? (
+          <div className={styles.viewToggle}>
+            <button
+              className={`${styles.viewBtn} ${view === 'diary' ? styles.viewBtnActive : ''}`}
+              onClick={() => setView('diary')}
+            >
+              <svg className={styles.viewIcon} aria-hidden="true">
+                <use href="/sprite.svg#icon-stopwatch" />
+              </svg>
+            </button>
+            <button
+              className={`${styles.viewBtn} ${view === 'statistics' ? styles.viewBtnActive : ''}`}
+              onClick={() => setView('statistics')}
+            >
+              <svg className={styles.viewIcon} aria-hidden="true">
+                <use href="/sprite.svg#icon-chart" />
+              </svg>
+            </button>
+          </div>
+        ) : null}
+
+        {view === 'diary' ? (
+          <DiaryBlock progress={book.progress} onDelete={handleDeleteEntry} />
+        ) : (
+          <StatisticsBlock
+            totalPages={book.totalPages}
+            readPages={totalReadPages}
+          />
+        )}
       </Dashboard>
 
       <MyBook
