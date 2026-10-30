@@ -27,6 +27,8 @@ export const ReadingPage = () => {
   const [view, setView] = useState<View>('diary');
   const [isBookReadOpen, setIsBookReadOpen] = useState(false);
 
+  const isBookDone = book?.status === 'done';
+
   useEffect(() => {
     if (!bookId) return;
 
@@ -65,6 +67,10 @@ export const ReadingPage = () => {
 
   const handleStart = async (page: number) => {
     if (!book) return;
+    if (isBookDone) {
+      toast.error('This book is already read');
+      return;
+    }
     try {
       const updatedBook = await startReading(book._id, page);
       setBook(updatedBook);
@@ -85,7 +91,6 @@ export const ReadingPage = () => {
       setCurrentPage(page);
       toast.success('Reading stopped!');
 
-      // Перевіряємо, чи книга дочитана
       if (page >= book.totalPages) {
         setIsBookReadOpen(true);
       }
@@ -117,14 +122,22 @@ export const ReadingPage = () => {
     return acc;
   }, 0);
 
+  const timeLeftString = book.timeLeftToRead
+    ? `${book.timeLeftToRead.hours} hours and ${book.timeLeftToRead.minutes} minutes left`
+    : undefined;
+
   return (
     <div className={styles.page}>
       <Dashboard>
-        <AddReadingForm
-          isReading={isReading}
-          onSubmit={isReading ? handleStop : handleStart}
-          initialPage={currentPage}
-        />
+        {!isBookDone ? (
+          <AddReadingForm
+            isReading={isReading}
+            onSubmit={isReading ? handleStop : handleStart}
+            initialPage={currentPage}
+          />
+        ) : (
+          <p className={styles.doneMessage}>This book is already read</p>
+        )}
 
         {book.progress.length > 0 && (
           <div className={styles.viewToggle}>
@@ -164,6 +177,7 @@ export const ReadingPage = () => {
         author={book.author}
         imageUrl={book.imageUrl}
         isReading={isReading}
+        timeLeft={timeLeftString}
       />
 
       <Modal isOpen={isBookReadOpen} onClose={() => setIsBookReadOpen(false)}>
