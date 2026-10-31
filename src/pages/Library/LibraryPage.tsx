@@ -13,6 +13,7 @@ import {
   addBook,
   removeBook,
   getRecommendedBooks,
+  addRecommendedBook,
 } from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
 import toast from 'react-hot-toast';
@@ -30,6 +31,9 @@ export const LibraryPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoodJobOpen, setIsGoodJobOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [selectedRecommendedBook, setSelectedRecommendedBook] =
+    useState<RecommendedBook | null>(null);
+  const [isAdding, setIsAdding] = useState(false);
 
   const loadOwnBooks = useCallback(async (status: string) => {
     setIsLoading(true);
@@ -88,7 +92,7 @@ export const LibraryPage = () => {
   }) => {
     try {
       await addBook(values);
-      setIsGoodJobOpen(true); // Показуємо модалку "Good job"
+      setIsGoodJobOpen(true);
       loadOwnBooks(selectedStatus);
     } catch (error: unknown) {
       const message = getErrorMessage(error);
@@ -115,7 +119,6 @@ export const LibraryPage = () => {
   };
 
   const handleStartReading = (id: string) => {
-    // Переходимо на сторінку читання з id книги
     navigate(`/reading?bookId=${id}`);
     setSelectedBook(null);
   };
@@ -124,11 +127,47 @@ export const LibraryPage = () => {
     setSelectedStatus(status);
   };
 
+  // Клік на картку в блоці Recommended books
+  const handleRecommendedBookClick = (book: RecommendedBook) => {
+    setSelectedRecommendedBook(book);
+  };
+
+  // Додавання з Recommended books
+  const handleAddRecommendedToLibrary = async (bookId: string) => {
+    if (isAdding || !selectedRecommendedBook) return;
+    setIsAdding(true);
+    try {
+      const ownBooksList = await getOwnBooks();
+      const isAlreadyInLibrary = ownBooksList.some(
+        (book) =>
+          book.title === selectedRecommendedBook.title &&
+          book.author === selectedRecommendedBook.author
+      );
+
+      if (isAlreadyInLibrary) {
+        toast.error('This book is already in your library');
+        return;
+      }
+
+      await addRecommendedBook(bookId);
+      setSelectedRecommendedBook(null);
+      setIsGoodJobOpen(true);
+      loadOwnBooks(selectedStatus);
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    } finally {
+      setIsAdding(false);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <Dashboard>
         <AddBookForm onSubmit={handleAddBook} />
-        <RecommendedBooksBlock books={recommendedBooks} />
+        <RecommendedBooksBlock
+          books={recommendedBooks}
+          onBookClick={handleRecommendedBookClick}
+        />
       </Dashboard>
 
       <LibraryBooks
@@ -150,6 +189,19 @@ export const LibraryPage = () => {
             book={selectedBook}
             actionLabel="Start reading"
             onAction={handleStartReading}
+          />
+        )}
+      </Modal>
+
+      <Modal
+        isOpen={!!selectedRecommendedBook}
+        onClose={() => setSelectedRecommendedBook(null)}
+      >
+        {selectedRecommendedBook && (
+          <BookDetailsModal
+            book={selectedRecommendedBook}
+            actionLabel="Add to library"
+            onAction={handleAddRecommendedToLibrary}
           />
         )}
       </Modal>

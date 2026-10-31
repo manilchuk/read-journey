@@ -2,21 +2,17 @@
 import { Link } from 'react-router-dom';
 import { BookCard } from '../BookCard/BookCard';
 import { Icon } from '../Icon/Icon';
+import type { RecommendedBook } from '@/types';
 import styles from './RecommendedBooksBlock.module.css';
-
-interface RecommendedBook {
-  _id: string;
-  title: string;
-  author: string;
-  imageUrl: string;
-}
 
 interface RecommendedBooksBlockProps {
   books: RecommendedBook[];
+  onBookClick?: (book: RecommendedBook) => void;
 }
 
 export const RecommendedBooksBlock = ({
   books,
+  onBookClick,
 }: RecommendedBooksBlockProps) => {
   return (
     <div className={styles.container}>
@@ -29,6 +25,7 @@ export const RecommendedBooksBlock = ({
             title={book.title}
             author={book.author}
             imageUrl={book.imageUrl}
+            onClick={() => onBookClick?.(book)}
           />
         ))}
       </div>
