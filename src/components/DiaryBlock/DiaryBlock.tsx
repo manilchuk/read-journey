@@ -5,17 +5,34 @@ import styles from './DiaryBlock.module.css';
 
 interface DiaryBlockProps {
   progress: ReadingProgress[];
-  onDelete: (readingId: string) => void;
+  onDelete: () => void;
+  onViewChange: (view: 'diary' | 'statistics') => void;
 }
 
-export const DiaryBlock = ({ progress, onDelete }: DiaryBlockProps) => {
+export const DiaryBlock = ({
+  progress,
+  onDelete,
+  onViewChange,
+}: DiaryBlockProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h2 className={styles.title}>Diary</h2>
         <div className={styles.icons}>
-          <Icon name="icon-stopwatch" className={styles.icon} />
-          <Icon name="icon-chart" className={styles.icon} />
+          <button
+            className={styles.iconBtn}
+            onClick={() => onViewChange('diary')}
+            aria-label="Show diary"
+          >
+            <Icon name="icon-stopwatch" className={styles.iconActive} />
+          </button>
+          <button
+            className={styles.iconBtn}
+            onClick={() => onViewChange('statistics')}
+            aria-label="Show statistics"
+          >
+            <Icon name="icon-chart" className={styles.icon} />
+          </button>
         </div>
       </div>
 
@@ -45,7 +62,10 @@ export const DiaryBlock = ({ progress, onDelete }: DiaryBlockProps) => {
               <div className={styles.stat}>
                 <span className={styles.percent}>
                   {entry.finishPage && entry.startPage
-                    ? ((entry.finishPage - entry.startPage) / 100).toFixed(1)
+                    ? (
+                        ((entry.finishPage - entry.startPage) / 100) *
+                        100
+                      ).toFixed(1)
                     : 0}
                   %
                 </span>
@@ -70,7 +90,7 @@ export const DiaryBlock = ({ progress, onDelete }: DiaryBlockProps) => {
 
               <button
                 className={styles.deleteBtn}
-                onClick={() => onDelete(entry.startReading)}
+                onClick={onDelete}
                 aria-label="Delete entry"
               >
                 <Icon name="icon-trash" />

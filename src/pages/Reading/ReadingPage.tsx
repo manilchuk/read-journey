@@ -139,35 +139,17 @@ export const ReadingPage = () => {
           <p className={styles.doneMessage}>This book is already read</p>
         )}
 
-        {book.progress.length > 0 && (
-          <div className={styles.viewToggle}>
-            <button
-              className={`${styles.viewBtn} ${view === 'diary' ? styles.viewBtnActive : ''}`}
-              onClick={() => setView('diary')}
-              aria-label="Show diary"
-            >
-              <svg className={styles.viewIcon} aria-hidden="true">
-                <use href="/sprite.svg#icon-stopwatch" />
-              </svg>
-            </button>
-            <button
-              className={`${styles.viewBtn} ${view === 'statistics' ? styles.viewBtnActive : ''}`}
-              onClick={() => setView('statistics')}
-              aria-label="Show statistics"
-            >
-              <svg className={styles.viewIcon} aria-hidden="true">
-                <use href="/sprite.svg#icon-chart" />
-              </svg>
-            </button>
-          </div>
-        )}
-
         {view === 'diary' ? (
-          <DiaryBlock progress={book.progress} onDelete={handleDeleteEntry} />
+          <DiaryBlock
+            progress={book.progress}
+            onDelete={handleDeleteEntry}
+            onViewChange={setView}
+          />
         ) : (
           <StatisticsBlock
             totalPages={book.totalPages}
             readPages={totalReadPages}
+            onViewChange={setView}
           />
         )}
       </Dashboard>

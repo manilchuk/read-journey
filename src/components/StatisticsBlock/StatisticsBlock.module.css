@@ -25,11 +25,36 @@
   gap: 8px;
 }
 
+.iconBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
 .icon {
   width: 24px;
   height: 24px;
   color: var(--color-text-muted);
+  opacity: 0.5;
   cursor: pointer;
+  transition: opacity var(--transition-main);
+}
+
+.iconActive {
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-main);
+  opacity: 1;
+}
+
+.iconBtn:hover .icon {
+  opacity: 0.8;
 }
 
 .chartWrapper {

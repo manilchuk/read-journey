@@ -1,14 +1,17 @@
 // src/components/StatisticsBlock/StatisticsBlock.tsx
+import { Icon } from '../Icon/Icon';
 import styles from './StatisticsBlock.module.css';
 
 interface StatisticsBlockProps {
   totalPages: number;
   readPages: number;
+  onViewChange: (view: 'diary' | 'statistics') => void;
 }
 
 export const StatisticsBlock = ({
   totalPages,
   readPages,
+  onViewChange,
 }: StatisticsBlockProps) => {
   const percent = totalPages > 0 ? (readPages / totalPages) * 100 : 0;
 
@@ -17,12 +20,20 @@ export const StatisticsBlock = ({
       <div className={styles.header}>
         <h2 className={styles.title}>Statistics</h2>
         <div className={styles.icons}>
-          <svg className={styles.icon} aria-hidden="true">
-            <use href="/sprite.svg#icon-stopwatch" />
-          </svg>
-          <svg className={styles.icon} aria-hidden="true">
-            <use href="/sprite.svg#icon-chart" />
-          </svg>
+          <button
+            className={styles.iconBtn}
+            onClick={() => onViewChange('diary')}
+            aria-label="Show diary"
+          >
+            <Icon name="icon-stopwatch" className={styles.icon} />
+          </button>
+          <button
+            className={styles.iconBtn}
+            onClick={() => onViewChange('statistics')}
+            aria-label="Show statistics"
+          >
+            <Icon name="icon-chart" className={styles.iconActive} />
+          </button>
         </div>
       </div>
 
