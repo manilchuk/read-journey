@@ -27,6 +27,7 @@ export interface SignInCredentials {
 export type BookStatus = 'unread' | 'in-progress' | 'done';
 
 export interface ReadingProgress {
+  _id?: string;
   startPage: number;
   startReading: string;
   finishPage?: number;

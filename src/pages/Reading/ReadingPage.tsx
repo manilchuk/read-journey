@@ -8,7 +8,12 @@ import { StatisticsBlock } from '@/components/StatisticsBlock/StatisticsBlock';
 import { MyBook } from '@/components/MyBook/MyBook';
 import { Modal } from '@/components/Modal/Modal';
 import { BookIsReadModal } from '@/components/BookIsReadModal/BookIsReadModal';
-import { getBookById, startReading, stopReading } from '@/services/books';
+import {
+  getBookById,
+  startReading,
+  stopReading,
+  deleteReading,
+} from '@/services/books';
 import { getErrorMessage } from '@/utils/handleError';
 import toast from 'react-hot-toast';
 import type { Book } from '@/types';
@@ -99,8 +104,15 @@ export const ReadingPage = () => {
     }
   };
 
-  const handleDeleteEntry = async () => {
-    toast.error('Deleting entries is not supported');
+  const handleDeleteEntry = async (readingId: string) => {
+    if (!book) return;
+    try {
+      const updatedBook = await deleteReading(book._id, readingId);
+      setBook(updatedBook);
+      toast.success('Entry deleted');
+    } catch (error: unknown) {
+      toast.error(getErrorMessage(error));
+    }
   };
 
   if (isLoading) {

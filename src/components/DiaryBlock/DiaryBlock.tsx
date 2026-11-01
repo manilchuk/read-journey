@@ -5,7 +5,7 @@ import styles from './DiaryBlock.module.css';
 
 interface DiaryBlockProps {
   progress: ReadingProgress[];
-  onDelete: () => void;
+  onDelete: (readingId: string) => void;
   onViewChange: (view: 'diary' | 'statistics') => void;
 }
 
@@ -90,7 +90,7 @@ export const DiaryBlock = ({
 
               <button
                 className={styles.deleteBtn}
-                onClick={onDelete}
+                onClick={() => entry._id && onDelete(entry._id)}
                 aria-label="Delete entry"
               >
                 <Icon name="icon-trash" />
